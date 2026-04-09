@@ -29,10 +29,13 @@ def main() -> None:
     agent = build_agent()
     context = build_runtime_context(user_id="user_1")
     config = build_config(thread_id="user_1_session")
-    while True:
-        user_input = input("请输入您的问题：")
-        stream_answer(agent, context, config, user_input)
-        print("-" * 50,end="\n\n")
+    try:
+        while True:
+            user_input = input("请输入您的问题：")
+            stream_answer(agent, context, config, user_input)
+            print("-" * 50, end="\n\n")
+    except KeyboardInterrupt:
+        print("\n已退出程序")
 
 if __name__ == "__main__":
     main()

@@ -38,6 +38,8 @@ ENV/
 env/
 .venv/
 
+main.py
+
 # IDE
 .idea/
 .vscode/

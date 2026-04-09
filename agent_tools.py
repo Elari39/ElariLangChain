@@ -4,7 +4,6 @@ from typing import Any
 import time
 import os
 import json
-# os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7890"  # 你的代理地址
 import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -110,31 +109,6 @@ def get_mossia_x_image(params: str = "{}") -> dict:
     except Exception as exc:
         return {"error": f"Mossia X API 调用失败: {str(exc)}"}
 
-# @tool(description="保存图片到本地")
-# def save_image_from_url(image_url: str, filename: str = "downloaded_image.jpg") -> str:
-#     """
-#     当用户明确要求保存图片、下载图片到本地时使用此工具。
-#     :param image_url: 图片的网络地址
-#     :param filename: 保存的文件名，默认为 downloaded_image.jpg
-#     """
-#     try:
-#         session = requests.Session()
-#         session.trust_env = False
-#         response = session.get(image_url, stream=True, timeout=10, verify=False)
-#         response.raise_for_status()
-#         img_dir = os.path.join(os.getcwd(), "img")
-#         os.makedirs(img_dir, exist_ok=True)
-#         save_path = os.path.join(img_dir, filename)
-
-#         with open(save_path, 'wb') as file:
-#             for chunk in response.iter_content(chunk_size=8192):
-#                 file.write(chunk)
-
-#         return f"✅ 图片已成功保存到本地路径：{save_path}"
-#     except Exception as e:
-#         return f"❌ 保存失败，错误信息：{str(e)}"
-
-
 # 在文件开头定义代理配置
 PROXY = {
     "http": "http://127.0.0.1:7890",
@@ -146,22 +120,18 @@ def save_image_from_url(image_url: str, filename: str = "downloaded_image.jpg") 
     try:
         session = requests.Session()
         session.trust_env = False
-        session.proxies.update(PROXY)          # 添加代理
+        session.proxies.update(PROXY)
         response = session.get(image_url, stream=True, timeout=15, verify=False)
         response.raise_for_status()
-
         img_dir = os.path.join(os.getcwd(), "img")
         os.makedirs(img_dir, exist_ok=True)
         save_path = os.path.join(img_dir, filename)
-
         with open(save_path, 'wb') as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
-
         return f"✅ 图片已成功保存到本地路径：{save_path}"
     except Exception as e:
         return f"❌ 保存失败，错误信息：{str(e)}"
-
 def build_tools() -> list[Any]:
     tools = load_tools(
         ["arxiv", "wikipedia"],
