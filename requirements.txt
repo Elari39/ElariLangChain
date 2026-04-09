@@ -8,6 +8,9 @@ langchain-experimental>=0.3.0
 # Chat Models
 langchain-openai>=0.2.0
 
+# Validation
+pydantic>=2.0.0
+
 # Environment
 python-dotenv>=1.0.0
 
@@ -18,8 +21,5 @@ urllib3>=2.0.0
 # HTML Parsing
 beautifulsoup4>=4.12.0
 
-# SerpAPI (网络搜索)
-serpapi>=0.1.0
-
-# Data handling
-pyarrow>=14.0.0
+# Search
+google-search-results>=2.4.2
