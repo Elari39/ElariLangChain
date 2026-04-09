@@ -32,6 +32,8 @@ wheels/
 
 /post/
 
+/backend/*
+
 # Virtual environments
 venv/
 ENV/

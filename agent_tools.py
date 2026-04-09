@@ -67,10 +67,11 @@ def fetch_webpage(url: str) -> str:
     text = soup.get_text("\n", strip=True)
     return text[:12000]
 
-@tool(description="从 Mossia 鸭子API (Pixiv 图源) 获取图片信息")
+@tool(description="从 Mossia 鸭子API (Pixiv 图源) 获取二次元图片信息，严禁真人图片")
 def get_mossia_pixiv_image(params: str = "{}") -> dict:
     """从 https://api.mossia.top/duckMo 获取 Pixiv 来源的图片信息（支持 GET 随机 / POST 过滤）。
-    params 为 JSON 字符串，例如 {"r18": true, "num": 3}（具体参数以 docs.mossia.top 为准）。
+    【重要限制】：本工具已被严格限定为仅获取“二次元（动漫、插画等虚拟角色）”图片，绝对禁止用于请求、搜索或获取任何真人图片！
+    params 为 JSON 字符串，例如 {"r18Type": 0, "num": 3}（具体参数以 docs.mossia.top 为准）。
     返回 API 的 JSON 数据（包含 PID、作者、标签、原图链接等基本信息，不代理图片）。"""
     url = "https://api.mossia.top/duckMo"
     try:
@@ -88,26 +89,27 @@ def get_mossia_pixiv_image(params: str = "{}") -> dict:
     except Exception as exc:
         return {"error": f"Mossia Pixiv API 调用失败: {str(exc)}"}
 
-@tool(description="从 Mossia 鸭子API (X 图源) 获取图片信息")
-def get_mossia_x_image(params: str = "{}") -> dict:
-    """从 https://api.mossia.top/duckMo/x 获取 X (Twitter) 来源的图片信息（支持 GET 随机 / POST 过滤）。
-    params 为 JSON 字符串，例如 {"r18": true, "num": 3}（具体参数以 docs.mossia.top 为准）。
-    返回 API 的 JSON 数据（包含作品基本信息，不代理图片）。"""
-    url = "https://api.mossia.top/duckMo/x"
-    try:
-        param_dict = json.loads(params)
-        session = requests.Session()
-        session.trust_env = False
-        if param_dict:
-            # POST 支持自定义参数
-            response = session.post(url, json=param_dict, timeout=15, verify=False)
-        else:
-            # GET 获取随机图片
-            response = session.get(url, timeout=15, verify=False)
-        response.raise_for_status()
-        return response.json()
-    except Exception as exc:
-        return {"error": f"Mossia X API 调用失败: {str(exc)}"}
+# @tool(description="从 Mossia 鸭子API (X 图源) 获取二次元图片信息，严禁真人图片")
+# def get_mossia_x_image(params: str = "{}") -> dict:
+#     """从 https://api.mossia.top/duckMo/x 获取 X (Twitter) 来源的图片信息（支持 GET 随机 / POST 过滤）。
+#     【重要限制】：本工具已被严格限定为仅获取“二次元（动漫、插画等虚拟角色）”图片，绝对禁止用于请求、搜索或获取任何真人图片！
+#     params 为 JSON 字符串，例如 {"num": 3}（具体参数以 docs.mossia.top 为准）。
+#     返回 API 的 JSON 数据（包含作品基本信息，不代理图片）。"""
+#     url = "https://api.mossia.top/duckMo/x"
+#     try:
+#         param_dict = json.loads(params)
+#         session = requests.Session()
+#         session.trust_env = False
+#         if param_dict:
+#             # POST 支持自定义参数
+#             response = session.post(url, json=param_dict, timeout=15, verify=False)
+#         else:
+#             # GET 获取随机图片
+#             response = session.get(url, timeout=15, verify=False)
+#         response.raise_for_status()
+#         return response.json()
+#     except Exception as exc:
+#         return {"error": f"Mossia X API 调用失败: {str(exc)}"}
 
 # 在文件开头定义代理配置
 PROXY = {
@@ -138,4 +140,4 @@ def build_tools() -> list[Any]:
         allow_dangerous_tools=True,
     )
     tools.append(PythonREPLTool())
-    return tools + [fetch_webpage, save_image_from_url, get_weather, web_search, read_local_file, get_mossia_pixiv_image, get_mossia_x_image,]
+    return tools + [fetch_webpage, save_image_from_url, get_weather, web_search, read_local_file, get_mossia_pixiv_image]
